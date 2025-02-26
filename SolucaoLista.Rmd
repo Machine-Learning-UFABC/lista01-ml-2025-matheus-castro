@@ -59,3 +59,37 @@ Classificador_KNN <- function(k,x,D) {
 
 Classificador_KNN(k,x,D)
 *Exercício 04*:
+library(tidyverse)
+
+data("iris")
+iris <- iris %>%
+  select(Petal.Length, Sepal.Length, Species) %>%
+  rename(x_1 = Petal.Length, x_2 = Sepal.Length, y = Species)
+
+Classificador_KNN <- function(k, x, D) {
+  D2 <- D %>%
+    mutate(dist = (x[1] - x_1)^2 + (x[2] - x_2)^2) %>%
+    arrange(dist) %>%
+    head(k)
+  
+
+  frequencias <- D2 %>% count(y, sort = TRUE)
+  
+  classe_predita <- frequencias %>% slice(1) %>% pull(y)
+  return(classe_predita)
+}
+
+avaliar_knn <- function(k, D) {
+  resultados <- D %>%
+    mutate(predito = map2_chr(x_1, x_2, ~Classificador_KNN(k, c(.x, .y), D)))
+  
+  acertos <- sum(resultados$y == resultados$predito)
+  total <- nrow(D)
+  return(acertos / total) # Retorna a taxa de acertos
+}
+
+taxa_acerto_k10 <- avaliar_knn(10, iris)
+taxa_acerto_k1 <- avaliar_knn(1, iris)
+
+cat("Taxa de acerto com k = 10:", taxa_acerto_k10 * 100, "%\n")
+cat("Taxa de acerto com k = 1:", taxa_acerto_k1 * 100, "%\n")
