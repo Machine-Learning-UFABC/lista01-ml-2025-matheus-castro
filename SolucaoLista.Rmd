@@ -18,27 +18,27 @@ knitr::opts_chunk$set(echo = T,
 options(width =70)
 ```
 
-## Exercício 01
-#a) Problema de classificação: O objetivo de uma algoritmo de aprendizado de máquina de classificação é atribuir uma categoria a um dado recebido, podendo ele ser uma imagem, um número, ou qualquer outro tipo de informação. Essa categoria precisa estar obrigatoriamente pré-definida em um conjunto de possíveis categorias para que o problema seja de classificação.
+*Exercício 01*:
+a) Problema de classificação: O objetivo de uma algoritmo de aprendizado de máquina de classificação é atribuir uma categoria a um dado recebido, podendo ele ser uma imagem, um número, ou qualquer outro tipo de informação. Essa categoria precisa estar obrigatoriamente pré-definida em um conjunto de possíveis categorias para que o problema seja de classificação.
 
-# Uma possível aplicação é a de categorizar o posicionamento político de um grupo de economistas:
-# Seus possíveis vetores de características poderiam ser informações como: "Publicou em revistas internacionais", "Possui currículo Lattes", "Universidade de formação", etc
-# Alguns rótulos resultantes poderiam ser: "Neoliberal", "Anarco-capitalista", "Socialista", "Social-Democrata", "Marxista-Leninista", etc
+Uma possível aplicação é a de categorizar o posicionamento político de um grupo de economistas:
+Seus possíveis vetores de características poderiam ser informações como: "Publicou em revistas internacionais", "Possui currículo Lattes", "Universidade de formação", etc
+Alguns rótulos resultantes poderiam ser: "Neoliberal", "Anarco-capitalista", "Socialista", "Social-Democrata", "Marxista-Leninista", etc
 
-#b) Problema de regressão: O objetivo destes algoritmos é encontrar uma função capaz de prever de forma mais precisa possível, um valor contínuo estimado a partir da base de dados.
-# Um exemplo de aplicação é a previsão de valores no mercado imobiliário, como em cases famosos.
-# Possíveis vetores de referência: Tamanho do apartamento, Quantidade de quartos, Localização, etc
-# Resposta: Estimativa de preço do apartamento.
+b) Problema de regressão: O objetivo destes algoritmos é encontrar uma função capaz de prever de forma mais precisa possível, um valor contínuo estimado a partir da base de dados.
+Um exemplo de aplicação é a previsão de valores no mercado imobiliário, como em cases famosos.
+Possíveis vetores de referência: Tamanho do apartamento, Quantidade de quartos, Localização, etc
+Resposta: Estimativa de preço do apartamento.
 
-#c) Problema de Agrupamento: Este problema definir regras de separação de categorias a partir das características observadas em cada dado, permitindo assim atribuir cada objeto de análise a uma categoria distinta sem que essa categoria tenha sido definida previamente 
-#Uma aplicação de algoritmo de agrupamento é a segmentação de Clientes.
-#Vetores de Características: Podem incluir idade, localização geográfica, histórico de compras, valor gasto e interações com a empresa.
-#Rótulos/Respostas: Rótulo criado a partir da previsão, mas algumas opções seriam "clientes fiéis", "clientes temporários", "clientes de alta renda", etc
+c) Problema de Agrupamento: Este problema definir regras de separação de categorias a partir das características observadas em cada dado, permitindo assim atribuir cada objeto de análise a uma categoria distinta sem que essa categoria tenha sido definida previamente 
+Uma aplicação de algoritmo de agrupamento é a segmentação de Clientes.
+Vetores de Características: Podem incluir idade, localização geográfica, histórico de compras, valor gasto e interações com a empresa.
+Rótulos/Respostas: Rótulo criado a partir da previsão, mas algumas opções seriam "clientes fiéis", "clientes temporários", "clientes de alta renda", etc
 
-## Exercício 02
-# A maldição da dimensionalidade ocorre para as previsões utilizando o algoritmo de kNN (K Nearest Neighbours) pois ele utiliza a média das distâncias dos K pontos mais próximos de um dado de entrada. O problema é que a mediana das distâncias de pontos distribuídos igualmente em um hiperplano aumenta conforme acontece o aumento da quantidade de suas dimensões. Desse modo, mesmo quando buscamos a média da distância dos pontos mais próximos possíveis do vetor de entrada, elas se tornam cada vez mais distantes, comprometendo a precisão da previsão formada.
+*Exercício 02*:
+ A maldição da dimensionalidade ocorre para as previsões utilizando o algoritmo de kNN (K Nearest Neighbours) pois ele utiliza a média das distâncias dos K pontos mais próximos de um dado de entrada. O problema é que a mediana das distâncias de pontos distribuídos igualmente em um hiperplano aumenta conforme acontece o aumento da quantidade de suas dimensões. Desse modo, mesmo quando buscamos a média da distância dos pontos mais próximos possíveis do vetor de entrada, elas se tornam cada vez mais distantes, comprometendo a precisão da previsão formada.
 
-## Exercício 03
+*Exercício 03*:
 library(tidyverse)
 D <- tibble( x_1 = rnorm(100,1,1),
              x_2 = rnorm(100,-1,2),
@@ -50,9 +50,12 @@ k = 10
 Classificador_KNN <- function(k,x,D) {
   D <- tibble( D2 <- D %>%
                  mutate( dist = (x[1] - x_1)^2 + (x[2] - x_2)^2 ) %>%
-                 arrange( dist ) %>% head(k) %>% count(y))
-  return(D)
+                 arrange( dist ) %>% head(k))
+  frequencias <- D %>% count(y, sort = TRUE)
+  classe_predita <- frequencias %>% slice(1) %>% pull(y)
+  
+  return(classe_predita)
 }
 
 Classificador_KNN(k,x,D)
-## Exercício 04
+*Exercício 04*:
